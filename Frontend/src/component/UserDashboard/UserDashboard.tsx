@@ -1,74 +1,168 @@
-'use client'
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Menu, User, Bell, Search } from "lucide-react";
-import Link from "next/link";
+"use client";
+import React, { useState } from "react";
+import {
+  Calendar,
+  CreditCard,
+  HelpCircle,
+  Menu,
+  X,
+  Home,
+  Settings,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
-export default function UserDashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const UserDashBoard = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+  const menuItems = [
+    { title: "User Profile", icon: Home },
+    { title: "Your Bookings", icon: Calendar },
+    { title: "Transactions", icon: CreditCard },
+    { title: "Support", icon: HelpCircle },
+    { title: "Settings", icon: Settings },
+  ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
-      <motion.aside
-        initial={{ x: -250 }}
-        animate={{ x: sidebarOpen ? 0 : -250 }}
-        transition={{ duration: 0.3 }}
-        className="bg-white w-64 p-6 shadow-md fixed h-full z-50"
+      <aside
+        className={`fixed top-0 left-0 h-screen bg-white border-r border-gray-200 
+        transition-all duration-300 ease-in-out ${isSidebarOpen ? "w-64" : "w-16"}
+      `}
       >
-        <h2 className="text-xl font-bold text-blue-700 mb-6">ParkWise</h2>
-        <nav className="space-y-4">
-          <Link href="#" className="flex items-center gap-2 p-2 rounded-md hover:bg-blue-100">
-            <Menu className="h-5 w-5 text-blue-700" /> Dashboard
-          </Link>
-          <Link href="#" className="flex items-center gap-2 p-2 rounded-md hover:bg-blue-100">
-            <User className="h-5 w-5 text-blue-700" /> Accounts
-          </Link>
-          <Link href="#" className="flex items-center gap-2 p-2 rounded-md hover:bg-blue-100">
-            <Bell className="h-5 w-5 text-blue-700" /> Notifications
-          </Link>
-        </nav>
-      </motion.aside>
+        <div className="flex flex-col h-full">
+          {/* Toggle Sidebar Button */}
+          <button
+            onClick={toggleSidebar}
+            className="absolute -right-5 top-6 p-2 bg-indigo-600 text-white rounded-full shadow-md"
+          >
+            {isSidebarOpen ? (
+              <ChevronLeft className="w-5 h-5" />
+            ) : (
+              <ChevronRight className="w-5 h-5" />
+            )}
+          </button>
+
+          {/* Logo */}
+          <div className="flex items-center justify-between p-4 border-b">
+            <h1
+              className={`text-xl font-bold text-indigo-600 transition-all ${
+                isSidebarOpen ? "block" : "hidden"
+              }`}
+            >
+              ParkWise
+            </h1>
+          </div>
+
+          {/* Menu Items */}
+          <nav className="flex-1 p-4">
+            {menuItems.map(({ title, icon: Icon }) => (
+              <button
+                key={title}
+                className="flex items-center w-full p-3 mb-2 text-gray-700 rounded-lg hover:bg-indigo-50 hover:text-indigo-600"
+              >
+                <Icon className="w-6 h-6" />
+                <span
+                  className={`ml-3 transition-all ${
+                    isSidebarOpen ? "block" : "hidden"
+                  }`}
+                >
+                  {title}
+                </span>
+              </button>
+            ))}
+          </nav>
+
+          {/* Logout Button */}
+          <div className="p-4 border-t">
+            <button className="flex items-center w-full p-3 text-gray-700 rounded-lg hover:bg-red-50 hover:text-red-600">
+              <LogOut className="w-6 h-6" />
+              <span
+                className={`ml-3 transition-all ${
+                  isSidebarOpen ? "block" : "hidden"
+                }`}
+              >
+                Logout
+              </span>
+            </button>
+          </div>
+        </div>
+      </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col ml-64 p-6">
+      <div
+        className={`transition-all duration-300 flex-1 ${
+          isSidebarOpen ? "ml-64" : "ml-16"
+        }`}
+      >
         {/* Header */}
-        <header className="flex justify-between items-center bg-white shadow-md p-4 rounded-lg">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden">
-            <Menu className="h-6 w-6 text-blue-700" />
-          </button>
-          <div className="relative w-1/3">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full p-2 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-            />
-            <Search className="absolute left-3 top-2 h-5 w-5 text-gray-400" />
-          </div>
-          <div className="flex items-center gap-4">
-            <Bell className="h-6 w-6 text-blue-700 cursor-pointer" />
-            <User className="h-8 w-8 text-blue-700 cursor-pointer" />
+        <header className="bg-white border-b border-gray-200">
+          <div className="flex items-center px-6 py-4">
+            <h2 className="ml-4 text-xl font-semibold text-gray-800">
+              Dashboard
+            </h2>
           </div>
         </header>
 
-        {/* Dashboard Content */}
-        <main className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <motion.div whileHover={{ scale: 1.05 }} className="p-6 bg-white shadow-lg rounded-lg">
-            <h3 className="text-lg font-semibold">Your Bookings</h3>
-            <p className="text-gray-600">Manage your parking reservations.</p>
-          </motion.div>
+        {/* Main Content Area */}
+        <main className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Your Bookings Card */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-black">
+                  Your Bookings
+                </h3>
+                <Calendar className="w-6 h-6 text-indigo-600" />
+              </div>
+              <p className="text-gray-600">Central Parking - Spot A12</p>
+              <p className="text-sm text-gray-500">Today, 2:00 PM - 5:00 PM</p>
+              <button className="mt-4 w-full py-2 text-sm text-indigo-600 hover:text-indigo-700">
+                View All Bookings
+              </button>
+            </div>
 
-          <motion.div whileHover={{ scale: 1.05 }} className="p-6 bg-white shadow-lg rounded-lg">
-            <h3 className="text-lg font-semibold">Recent Transactions</h3>
-            <p className="text-gray-600">View your payment history.</p>
-          </motion.div>
+            {/* Recent Transactions Card */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-black">
+                  Recent Transactions
+                </h3>
+                <CreditCard className="w-6 h-6 text-indigo-600" />
+              </div>
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-gray-600">Parking Payment</p>
+                  <p className="text-sm text-gray-500">Today at 1:45 PM</p>
+                </div>
+                <span className="font-medium">$15.00</span>
+              </div>
+              <button className="mt-4 w-full py-2 text-sm text-indigo-600 hover:text-indigo-700">
+                View All Transactions
+              </button>
+            </div>
 
-          <motion.div whileHover={{ scale: 1.05 }} className="p-6 bg-white shadow-lg rounded-lg">
-            <h3 className="text-lg font-semibold">Support</h3>
-            <p className="text-gray-600">Get assistance with your account.</p>
-          </motion.div>
+            {/* Support Card */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-black">Support</h3>
+                <HelpCircle className="w-6 h-6 text-indigo-600" />
+              </div>
+              <p className="text-gray-600">Need help with your booking?</p>
+              <button className="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700">
+                Contact Support
+              </button>
+            </div> 
+          </div>
         </main>
       </div>
     </div>
   );
-}
+};
+
+export default UserDashBoard;
+ 
