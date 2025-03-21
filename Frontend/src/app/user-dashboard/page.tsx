@@ -1,5 +1,5 @@
 import React from 'react'
-import UserDashboard from '@/component/UserDashboard/UserDashboard'
+import UserDashboard from '@/components/UserDashboard/UserDashboard'
 
 const User = () => {
   return (
